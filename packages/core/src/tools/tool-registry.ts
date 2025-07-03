@@ -302,7 +302,7 @@ export function sanitizeParameters(
       schema.format !== 'enum' &&
       schema.format !== 'date-time'
     ) {
-      schema.format = undefined;
+      delete schema.format;
     }
   }
 }
