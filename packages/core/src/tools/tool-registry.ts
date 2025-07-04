@@ -174,9 +174,9 @@ export class ToolRegistry {
         }
 
         for (const tool of discoveredItems) {
-          if (tool['function_declarations']) {
+          if (Array.isArray(tool['function_declarations'])) {
             functions.push(...tool['function_declarations']);
-          } else if (tool['functionDeclarations']) {
+          } else if (Array.isArray(tool['functionDeclarations'])) {
             functions.push(...tool['functionDeclarations']);
           } else if (tool['name']) {
             functions.push(tool);
@@ -302,7 +302,7 @@ export function sanitizeParameters(
       schema.format !== 'enum' &&
       schema.format !== 'date-time'
     ) {
-      delete schema.format;
+      schema.format = undefined;
     }
   }
 }
