@@ -253,8 +253,9 @@ describe('ToolRegistry', () => {
       const registeredParams = (discoveredTool as DiscoveredTool).schema
         .parameters as Schema;
       expect(registeredParams.properties?.['some_string']).toBeDefined();
-      expect(registeredParams.properties?.['some_string']).not.toHaveProperty(
+      expect(registeredParams.properties?.['some_string']).toHaveProperty(
         'format',
+        undefined,
       );
     });
   });
@@ -270,7 +271,7 @@ describe('sanitizeParameters', () => {
       },
     };
     sanitizeParameters(schema);
-    expect(schema.properties?.['id']).not.toHaveProperty('format');
+    expect(schema.properties?.['id']).toHaveProperty('format', undefined);
     expect(schema.properties?.['name']).not.toHaveProperty('format');
   });
 
@@ -304,9 +305,10 @@ describe('sanitizeParameters', () => {
       },
     };
     sanitizeParameters(schema);
-    expect(
-      schema.properties?.['user']?.properties?.['email'],
-    ).not.toHaveProperty('format');
+    expect(schema.properties?.['user']?.properties?.['email']).toHaveProperty(
+      'format',
+      undefined,
+    );
   });
 
   it('should handle arrays of objects', () => {
@@ -327,7 +329,7 @@ describe('sanitizeParameters', () => {
     sanitizeParameters(schema);
     expect(
       (schema.properties?.['items']?.items as Schema)?.properties?.['itemId'],
-    ).not.toHaveProperty('format');
+    ).toHaveProperty('format', undefined);
   });
 
   it('should handle schemas with no properties to sanitize', () => {
@@ -358,7 +360,7 @@ describe('sanitizeParameters', () => {
     schema.properties.self = schema;
 
     expect(() => sanitizeParameters(schema)).not.toThrow();
-    expect(schema.properties.name).not.toHaveProperty('format');
+    expect(schema.properties.name).toHaveProperty('format', undefined);
   });
 
   it('should handle complex nested schemas with cycles', () => {
@@ -388,11 +390,12 @@ describe('sanitizeParameters', () => {
     };
 
     expect(() => sanitizeParameters(schema)).not.toThrow();
-    expect(schema.properties?.['ceo']?.properties?.['id']).not.toHaveProperty(
+    expect(schema.properties?.['ceo']?.properties?.['id']).toHaveProperty(
       'format',
+      undefined,
     );
     expect(
       schema.properties?.['ceo']?.properties?.['manager']?.properties?.['id'],
-    ).not.toHaveProperty('format');
+    ).toHaveProperty('format', undefined);
   });
 });
